@@ -42,6 +42,10 @@
             android:name=".XoaLienHeActivity"
             android:exported="true" >
         </activity>
+        <activity
+            android:name=".PrintLienHeActivity"
+            android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

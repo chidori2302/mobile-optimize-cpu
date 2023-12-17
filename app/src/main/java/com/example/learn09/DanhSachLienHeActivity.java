@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -44,6 +45,7 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
     private ArrayList<Contact> contactItemList = new ArrayList<Contact>();
     private ArrayList<String> dataUrl = new ArrayList<>();
     private Contact lienHe;
+    private int offset = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +56,26 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
         contactAdapter = new ContactAdapter(DanhSachLienHeActivity.this, contactItemList);
 
         lvTG.setAdapter(contactAdapter);
-        new getContact().execute(0);
+        new getContact().execute(offset);
+
+        lvTG.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // Do something on scroll state change if needed
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // Check if the user is at the bottom of the list
+                int lastVisibleItem = firstVisibleItem + visibleItemCount;
+                if (lastVisibleItem == totalItemCount && totalItemCount != 0) {
+                    offset++;
+                    new getContact().execute(offset);
+                }
+
+
+            }
+        });
 
     }
 
@@ -67,7 +88,23 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
                 SQLiteDatabase db= openOrCreateDatabase("ql_lienhe.db", MODE_PRIVATE, null);
                 db.execSQL("create table if not exists contact(ID INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, email TEXT, imageUrl TEXT)");
 
-                Cursor cursor = db.query("contact", null, null, null, null, null, null);
+                String tableName = "contact";
+                String selection = null; // your selection criteria
+                String groupBy = null; // group by clause
+                String having = null; // having clause
+                String orderBy = null; // order by clause
+                String limit = "10"; // limit the number of rows returned
+                String offset = params[0]+""; // offset to skip the first 20 rows
+
+                String query = "SELECT * FROM " + tableName +
+                        (selection != null ? " WHERE " + selection : "") +
+                        (groupBy != null ? " GROUP BY " + groupBy : "") +
+                        (having != null ? " HAVING " + having : "") +
+                        (orderBy != null ? " ORDER BY " + orderBy : "") +
+                        (limit != null ? " LIMIT " + limit : "") +
+                        (offset != null ? " OFFSET " + offset : "");
+
+                Cursor cursor = db.rawQuery(query, null);
 
                 if (cursor.moveToFirst()) {
                     do {
@@ -88,7 +125,7 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d(TAG, "Bắt đầu submit");
+            Log.d(TAG, "Trang "+offset);
         }
     }
 }

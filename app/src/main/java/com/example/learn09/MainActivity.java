@@ -11,7 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnThem, btnXem, btnQL;
+    Button btnThem, btnXem, btnQL, btnPrint;
     private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnThem = findViewById(R.id.btnThem);
         Button btnXem = findViewById(R.id.btnXem);
         Button btnXoa = findViewById(R.id.btnXoa);
+        Button btnPrint = findViewById(R.id.btnPrint);
 
         btnThem.setOnClickListener(new View.OnClickListener() {
 
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 Intent i=new Intent(MainActivity.this, XoaLienHeActivity.class);
+                startActivity(i);
+            }
+        });
+        btnPrint.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                Intent i=new Intent(MainActivity.this, PrintLienHeActivity.class);
                 startActivity(i);
             }
         });

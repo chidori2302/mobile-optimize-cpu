@@ -1,5 +1,7 @@
 package com.example.learn09;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -28,7 +30,8 @@ public class CreateContactService extends Service {
         ContentValues value = new ContentValues();
         value.put("name", intent.getStringExtra("name"));
         value.put("email", intent.getStringExtra("email"));
-        new createContactThread(150000, value).start();
+        value.put("imageUrl", intent.getStringExtra(url));
+        new createContactThread(minPrime, value).start();
 
         // Trả về một hằng số để chỉ định cách Service sẽ được restart trong trường hợp bị hủy bởi hệ thống
         return Service.START_NOT_STICKY;
@@ -43,10 +46,14 @@ public class CreateContactService extends Service {
         }
 
         public void run() {
+            long currentTimeMillis = System.currentTimeMillis();
             for (int i = 0; i < minPrime; i++) {
                 Log.d(TAG, "Vòng lặp thứ: " + i);
                 db.insert("contact", null, this.value);
             }
+            long lastTimeMillis = System.currentTimeMillis();
+            long time = lastTimeMillis - currentTimeMillis;
+            Log.d(TAG, "Thời gian xử lý: " + time + "ms");
             Log.d(TAG, "Lưu thành công");
         }
     }

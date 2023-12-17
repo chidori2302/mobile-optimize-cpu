@@ -53,22 +53,26 @@ public class ThemLienHeActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 try {
-                    for (int i = 0; i < 150000; i++) {
+                    String url = editUrl.getText() + "";
+                    if (url.length() == 0) {
+                        url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
+                    }
+                    value= new ContentValues();
+                    value.put("name", editMaTG.getText()+"");
+                    value.put("email", editTenTG.getText()+"");
+                    value.put("imageUrl", url);
+                    long currentTimeMillis = System.currentTimeMillis();
+                    for (int i = 0; i < 100000; i++) {
                         Log.d(TAG, "Vòng lặp thứ: " + i);
-                        String url = editUrl.getText() + "";
-                        if (url.length() == 0) {
-                            url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
-                        }
-                        value= new ContentValues();
-                        value.put("name", editMaTG.getText()+"");
-                        value.put("email", editTenTG.getText()+"");
-                        value.put("imageUrl", url);
                         db.insert("contact", null, value);
                     }
+                    long lastTimeMillis = System.currentTimeMillis();
+                    long time = lastTimeMillis - currentTimeMillis;
+                    Log.d(TAG, "Thời gian xử lý: " + time + "ms");
                     Toast.makeText(ThemLienHeActivity.this, "Thêm liên hệ thành công", Toast.LENGTH_LONG).show();
 
-                    Intent i=new Intent(ThemLienHeActivity.this, DanhSachLienHeActivity.class);
-                    startActivity(i);
+//                    Intent i=new Intent(ThemLienHeActivity.this, DanhSachLienHeActivity.class);
+//                    startActivity(i);
                 }
                 catch(Exception e) {
                     Toast.makeText(ThemLienHeActivity.this, "Thêm liên hệ thất bại", Toast.LENGTH_LONG).show();
@@ -92,8 +96,12 @@ public class ThemLienHeActivity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
                 Intent serviceIntent = new Intent(ThemLienHeActivity.this, CreateContactService.class);
-                serviceIntent.putExtra("minPrime", 100000);
-                serviceIntent.putExtra("url", editUrl.getText().toString());
+                String url = editUrl.getText() + "";
+                if (url.length() == 0) {
+                    url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
+                }
+                serviceIntent.putExtra("minPrime", 100);
+                serviceIntent.putExtra("url", url);
                 serviceIntent.putExtra("name", editMaTG.getText().toString());
                 serviceIntent.putExtra("email", editTenTG.getText().toString());
                 startService(serviceIntent);
@@ -102,27 +110,27 @@ public class ThemLienHeActivity extends AppCompatActivity {
         btnLuu1Thread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                new createContactThread(150000).start();
+                new createContactThread(100000).start();
             }
         });
-        btnLuu4Thread.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                createContactThread thread1 = new createContactThread(25000);
-                createContactThread thread2 = new createContactThread(25000);
-                createContactThread thread3 = new createContactThread(25000);
-                createContactThread thread4 = new createContactThread(25000);
-                createContactThread thread5 = new createContactThread(25000);
-                createContactThread thread6 = new createContactThread(25000);
-
-                thread1.start();
-                thread2.start();
-                thread3.start();
-                thread4.start();
-                thread5.start();
-                thread6.start();
-            }
-        });
+//        btnLuu4Thread.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View arg0) {
+//                createContactThread thread1 = new createContactThread(25000);
+//                createContactThread thread2 = new createContactThread(25000);
+//                createContactThread thread3 = new createContactThread(25000);
+//                createContactThread thread4 = new createContactThread(25000);
+//                createContactThread thread5 = new createContactThread(25000);
+//                createContactThread thread6 = new createContactThread(25000);
+//
+//                thread1.start();
+//                thread2.start();
+//                thread3.start();
+//                thread4.start();
+//                thread5.start();
+//                thread6.start();
+//            }
+//        });
     }
 
     private final class createContact extends AsyncTask<Integer, Void, String> {
@@ -131,18 +139,22 @@ public class ThemLienHeActivity extends AppCompatActivity {
         protected String doInBackground(Integer... params) {
 
             try {
+                String url = editUrl.getText() + "";
+                if (url.length() == 0) {
+                    url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
+                }
+                value= new ContentValues();
+                value.put("name", editMaTG.getText()+"");
+                value.put("email", editTenTG.getText()+"");
+                value.put("imageUrl", url);
+                long currentTimeMillis = System.currentTimeMillis();
                 for (int i = 0; i < params[0]; i++) {
                     Log.d(TAG, "Vòng lặp thứ: " + i);
-                    String url = editUrl.getText() + "";
-                    if (url.length() == 0) {
-                        url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
-                    }
-                    value= new ContentValues();
-                    value.put("name", editMaTG.getText()+"");
-                    value.put("email", editTenTG.getText()+"");
-                    value.put("imageUrl", url);
                     db.insert("contact", null, value);
                 }
+                long lastTimeMillis = System.currentTimeMillis();
+                long time = lastTimeMillis - currentTimeMillis;
+                Log.d(TAG, "Thời gian xử lý: " + time + "ms");
             }
             catch(Exception e) {
                 return e.getMessage();
@@ -154,8 +166,8 @@ public class ThemLienHeActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Toast.makeText(ThemLienHeActivity.this, "Thêm liên hệ thành công", Toast.LENGTH_LONG).show();
 
-            Intent i=new Intent(ThemLienHeActivity.this, DanhSachLienHeActivity.class);
-            startActivity(i);
+//            Intent i=new Intent(ThemLienHeActivity.this, DanhSachLienHeActivity.class);
+//            startActivity(i);
             Log.d(TAG, result);
         }
     }
@@ -168,25 +180,22 @@ public class ThemLienHeActivity extends AppCompatActivity {
 
         public void run() {
             // compute primes larger than minPrime
-            boolean isCanInsert = false;
-            if(this.minPrime >= 100000){
-                isCanInsert = true;
+            String url = editUrl.getText() + "";
+            if (url.length() == 0) {
+                url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
             }
+            value= new ContentValues();
+            value.put("name", editMaTG.getText()+"");
+            value.put("email", editTenTG.getText()+"");
+            value.put("imageUrl", url);
+            long currentTimeMillis = System.currentTimeMillis();
             for (int i = 0; i < this.minPrime; i++) {
                 Log.d(TAG, "Vòng lặp thứ: " + i);
-                String url = editUrl.getText() + "";
-                if (url.length() == 0) {
-                    url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
-                }
-                value= new ContentValues();
-                value.put("name", editMaTG.getText()+"");
-                value.put("email", editTenTG.getText()+"");
-                value.put("imageUrl", url);
-
-                if (isCanInsert){
-                    db.insert("contact", null, value);
-                }
+                db.insert("contact", null, value);
             }
+            long lastTimeMillis = System.currentTimeMillis();
+            long time = lastTimeMillis - currentTimeMillis;
+            Log.d(TAG, "Thời gian xử lý: " + time + "ms");
             Log.d(TAG,"Lưu thành công" );
         }
     }
