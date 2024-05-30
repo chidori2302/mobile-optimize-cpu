@@ -55,27 +55,27 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
         lvTG = findViewById(R.id.lvTG);
         contactAdapter = new ContactAdapter(DanhSachLienHeActivity.this, contactItemList);
 
-        lvTG.setAdapter(contactAdapter);
         new getContact().execute(offset);
+        lvTG.setAdapter(contactAdapter);
 
-        lvTG.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                // Do something on scroll state change if needed
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                // Check if the user is at the bottom of the list
-                int lastVisibleItem = firstVisibleItem + visibleItemCount;
-                if (lastVisibleItem == totalItemCount && totalItemCount != 0) {
-                    offset++;
-                    new getContact().execute(offset);
-                }
-
-
-            }
-        });
+//        lvTG.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//                // Do something on scroll state change if needed
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                // Check if the user is at the bottom of the list
+//                int lastVisibleItem = firstVisibleItem + visibleItemCount;
+//                if (lastVisibleItem == totalItemCount && totalItemCount != 0) {
+//                    offset++;
+//                    new getContact().execute(offset);
+//                }
+//
+//
+//            }
+//        });
 
     }
 
@@ -100,9 +100,11 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
                         (selection != null ? " WHERE " + selection : "") +
                         (groupBy != null ? " GROUP BY " + groupBy : "") +
                         (having != null ? " HAVING " + having : "") +
-                        (orderBy != null ? " ORDER BY " + orderBy : "") +
-                        (limit != null ? " LIMIT " + limit : "") +
-                        (offset != null ? " OFFSET " + offset : "");
+                        (orderBy != null ? " ORDER BY " + orderBy : "")
+//                        +
+//                        (limit != null ? " LIMIT " + limit : "") +
+//                        (offset != null ? " OFFSET " + offset : "")
+                        ;
 
                 Cursor cursor = db.rawQuery(query, null);
 
@@ -120,6 +122,7 @@ public class DanhSachLienHeActivity extends AppCompatActivity {
             catch(Exception e) {
                 return e.getMessage();
             }
+
             return "Executed";
         }
 

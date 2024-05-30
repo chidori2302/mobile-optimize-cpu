@@ -100,7 +100,7 @@ public class ThemLienHeActivity extends AppCompatActivity {
                 if (url.length() == 0) {
                     url = "https://file.coinexstatic.com/2023-11-03/00AAA896B058F8834327A5F2FE3FC9B4.png";
                 }
-                serviceIntent.putExtra("minPrime", 100);
+                serviceIntent.putExtra("minPrime", 100000);
                 serviceIntent.putExtra("url", url);
                 serviceIntent.putExtra("name", editMaTG.getText().toString());
                 serviceIntent.putExtra("email", editTenTG.getText().toString());
